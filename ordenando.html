@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Ordenando Vetores</title>
+    <link rel="stylesheet" href="ordenando.css">
+</head>
+    <main>
+        <body>
+
+            <input type="number" id="valor"> <!-- entrada numérico de id='valor' -->
+
+            <button onclick="add()">Adicionar</button> <!-- criando botão 'Adicionar' com a função 'add' ao CLICAR -->
+
+            <select id="algoritmo"> <!-- campo de seleção com as opções pedidas -->
+                <option value="bubble_sort" selected>Bubble Sort</option>
+                <option value="selection_sort">Selection Sort</option>
+                <option value="quick_sort">Quick Sort</option>
+            </select>
+
+            <!-- criando o botão 'Ordenar'(Sort) para a função 'ordenar' e outro 'Misturar'(Shuffle) com a função 'misturar' -->
+            <button onclick="ordenar()">Ordenar</button>
+            <button onclick="misturar()">Misturar</button>
+
+            <ul id="valores"></ul> <!-- criando lista não ordenada de id="valores" -->
+
+            <script src="ordenando.js"></script> <!-- biblioteca ordenando.js -->
+
+            <script> /* criando script com funções 'add', 'ordenar' e 'misturar' sem parâmetros */
+                var vetor = [];
+
+                function atualizarLista() { /* criei a função 'atualizarLista' para evitar repetição de código e sincronizar a lista com o vetor */
+                    var lista = document.getElementById("valores");
+
+                    lista.innerHTML = "";
+
+                    for (var i = 0; i < vetor.length; i++) {
+                        var item = document.createElement("li");
+                        item.textContent = vetor[i];
+                        lista.appendChild(item);
+                    }
+                }
+
+                function add() { /* função 'add'  */
+                
+                    var campo = document.getElementById("valor"); // capturando o campo de entrada
+                    var lista = document.getElementById("valores"); // capturando a lista
+                    var node = document.createElement("li");  // criando elemento 'li'
+                    var texto = document.createTextNode(campo.value); // criando nó de texto
+
+                    node.appendChild(texto); // definindo nó de texto com o valor do campo de entrada e o incluindo como filho de node
+
+                    lista.appendChild(node); // adicionando o elemento 'node' à lista 'valores'
+
+                    campo.value = "";
+                    campo.focus();
+                }
+
+                function ordenar() { /* função 'ordenar' */
+                    // capturando lista e select
+                    var lista = document.getElementById("valores"); 
+                    var algoritmo = document.getElementById("algoritmo"); 
+
+                    // obtendo os itens da lista
+                    var itens = lista.children; 
+                    var vetor = [];
+
+                    for (var i = 0; i < itens.length; i++) {
+                        vetor.push(eval(itens[i].innerHTML));   // convertendo conteúdo para inteiro
+                    }
+
+                    // escolhendo algoritmo
+                    switch (algoritmo.selectedIndex) {
+
+                        case 0:
+                            bubble_sort(vetor);
+                            break;
+
+                        case 1:
+                            selection_sort(vetor);
+                            break;
+
+                        case 2:
+                            quick_sort(vetor, 0, vetor.length - 1);
+                            break;
+                    }
+
+                    lista.innerHTML = vetor  // atualizando lista usando 'map' e 'reduce'
+                        .map(valor => `<li>${valor}</li>`)
+                        .reduce((acumulador, valor) => acumulador + valor);
+                }
+
+            function misturar() {
+
+                    var lista = document.getElementById("valores"); // capturando lista
+
+                    var itens = lista.children;  // obtendo os itens
+
+                    var vetor = [];
+
+                    for (var i = 0; i < itens.length; i++) {
+
+                        vetor.push(eval(itens[i].innerHTML));   // convertendo conteúdo para inteiro
+                    }
+
+                    shuffle(vetor, vetor.length * 2);  // aplicando 'shuffle'
+
+                    lista.innerHTML = vetor   // atualizando lista novamente utilizando 'map' e 'reduce'
+                        .map(valor => `<li>${valor}</li>`)
+                        .reduce((acumulador, valor) => acumulador + valor);
+                }
+
+            </script>
+
+        </body>
+    </main>
+</html>
